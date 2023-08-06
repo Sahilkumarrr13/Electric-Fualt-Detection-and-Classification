@@ -60,8 +60,7 @@ class ModelTrainer:
                 obj=best_model
             )
             
-            predicted=best_model.predict(X_test)
-            score = np.mean(cross_val_score(best_model, X_test, y_test, cv = 3))
+            score = np.mean(cross_val_score(best_model, X_train, y_train, cv = 3))
             return score   
             
         except Exception as e:

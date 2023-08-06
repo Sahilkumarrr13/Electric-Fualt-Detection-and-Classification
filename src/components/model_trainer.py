@@ -13,7 +13,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 from src.exception import CustomException
 from src.logger import logging
-from src.utils import save_object, evaluate_models
+from src.utils import save_object
 
 @dataclass
 class ModelTrainerConfig:
@@ -33,34 +33,39 @@ class ModelTrainer:
                 test_array[:, :-1],
                 test_array[:, -1]
             )
-            models = {
-                "SVM Model": SVC(C = 1000),
-                "Decision Tree": DecisionTreeClassifier(criterion='gini',ccp_alpha=0.0012),
-                "Random Forest": RandomForestClassifier(max_depth=6, min_samples_leaf=10, min_samples_split=15,n_estimators=10),
-                "KNN": KNeighborsClassifier(leaf_size= 1, n_neighbors= 5,p= 1)
-            }
             
-            model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
-                                              models=models)
             
-            best_model_score = max(sorted(model_report.values()))
-            best_model_name = list(model_report.keys())[
-                list(model_report.values()).index(best_model_score)
-            ]
+            # models = {
+            #     "SVM Model": SVC(C = 1000),
+            #     "Decision Tree": DecisionTreeClassifier(criterion='gini',ccp_alpha=0.0012),
+            #     "Random Forest": RandomForestClassifier(max_depth=6, min_samples_leaf=10, min_samples_split=15,n_estimators=10),
+            #     "KNN": KNeighborsClassifier(leaf_size= 1, n_neighbors= 5,p= 1)
+            # }
             
-            best_model = models[best_model_name]
+            # model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
+            #                                   models=models)
             
-            if best_model_score<0.6:
-                raise CustomException('No Best Model Found')
+            # best_model_score = max(sorted(model_report.values()))
+            # best_model_name = list(model_report.keys())[
+            #     list(model_report.values()).index(best_model_score)
+            # ]
             
-            logging.info(f"Best found model on both training and testing dataset")
+            # best_model = models[best_model_name]
+            
+            # if best_model_score<0.6:
+            #     raise CustomException('No Best Model Found')
+            
+            # logging.info(f"Best found model on both training and testing dataset")
+            
+            sv = SVC(C=1000)
+            sv.fit(X_train, y_train)
             
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,
-                obj=best_model
+                obj=sv
             )
             
-            score = np.mean(cross_val_score(best_model, X_train, y_train, cv = 3))
+            score = np.mean(cross_val_score(sv, X_test, y_test, cv = 3))
             return score   
             
         except Exception as e:

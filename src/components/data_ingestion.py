@@ -28,6 +28,10 @@ class DataIngestion:
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
 
+            df.drop(columns=['Unnamed: 7', 'Unnamed: 8'], inplace=True)
+            for i in ['Va', 'Vb', 'Vc']:
+                df[i] = df[i]*11000
+    
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
 
             logging.info("Train test split initiated")

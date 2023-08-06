@@ -3,6 +3,7 @@ numpy
 matplotlib
 scikit-learn
 xgboost
+Flask
 
 # This -e . is used to connect the requirements.txt file with setup.py so that whenever we run this file, we setup our project, i.e. the setup
 # function written in the end. But we need to this only once so we comment out this -e . after running once so that we can install 

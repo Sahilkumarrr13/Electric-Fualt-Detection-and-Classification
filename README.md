@@ -1,1 +1,1 @@
-## Complete End to End Electric Fault Detection and Classification Project
+# Complete End to End Electric Fault Detection Project
